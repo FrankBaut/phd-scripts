@@ -1,0 +1,269 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r include=FALSE,echo=FALSE}
+library(tidyverse)
+library(readxl)
+library(lubridate)
+library(ggplot2)
+library(scales)
+library(timetk)
+library(magrittr)
+library(dplyr)
+library(xtable)
+library(rbokeh)
+library(magrittr)
+library(extrafont)
+loadfonts()
+library(ggpointdensity)
+library(ggprism)
+library(lubridate)
+library(timetk)
+```
+
+```{r}
+triaxial_transform<-function(df,start="2023-01-26 11:58:00",end = "2023-01-26 13:35:00"){
+  df <- df[3:length(df$V1),]
+  df %<>% mutate(time =as.POSIXct(V1))
+  df %<>% mutate(V1 = format(as.POSIXct(V1),"%H:%M:%S"))
+  df <- df[df$time >= as.POSIXct(start) & df$time <= as.POSIXct(end),]
+  df %<>% mutate(V2 = as.numeric(gsub(".*:","",V2)),V3 = as.numeric(gsub(".*:","",V3)), V4 = as.numeric(gsub("}", "",sub("^.*[:]| }", "", V4))))
+  df %<>% rename("x"=V2,"y"=V3,"z"=V4) %>% select(-V1)
+  return(df)
+}
+
+one_var_transform<- function(df,start="2023-01-26 11:58:00",end = "2023-01-26 13:35:00"){
+  df <- df[3:length(df$V1),]
+  df %<>% mutate(time =as.POSIXct(V1))
+  df %<>% mutate(V1 = format(as.POSIXct(V1),"%H:%M:%S"))
+  df <- df[df$time >= as.POSIXct(start) & df$time <= as.POSIXct(end),]
+  return(df)
+}
+```
+
+MD
+```{r}
+acel_md<-read.csv("F0:F2:5B:20:91:AD-01-26-2023-13-39-46/acceleration-01-26-2023-13-39-47.csv",header = F)
+acel_md<-triaxial_transform(acel_md) %>% mutate(extremidad="MD")
+lux_md<-read.csv("F0:F2:5B:20:91:AD-01-26-2023-13-39-46/illuminance-01-26-2023-13-39-47.csv",header = F)
+lux_md<-one_var_transform(lux_md)%>% mutate(extremidad="MD")
+temp_md<-read.csv("F0:F2:5B:20:91:AD-01-26-2023-13-39-46/temperature[1]-01-26-2023-13-39-47.csv",header = F)
+temp_md<-one_var_transform(temp_md)%>% mutate(extremidad="MD")
+```
+
+PI
+```{r}
+acel_pi<-read.csv("FA:30:6C:FE:9A:40-01-26-2023-13-44-12/acceleration-01-26-2023-13-44-13.csv",header = F)
+acel_pi<-triaxial_transform(acel_pi) %>% mutate(extremidad="PI")
+lux_pi<-read.csv("FA:30:6C:FE:9A:40-01-26-2023-13-44-12/illuminance-01-26-2023-13-44-13.csv",header = F)
+lux_pi<-one_var_transform(lux_pi)%>% mutate(extremidad="PI")
+temp_pi<-read.csv("FA:30:6C:FE:9A:40-01-26-2023-13-44-12/temperature[1]-01-26-2023-13-44-13.csv",header = F)
+temp_pi<-one_var_transform(temp_pi)%>% mutate(extremidad="PI")
+```
+
+MI
+```{r}
+acel_mi<-read.csv("FD:A1:04:E0:B2:92-01-26-2023-13-41-43/acceleration-01-26-2023-13-41-44.csv",header = F)
+acel_mi<-triaxial_transform(acel_mi) %>% mutate(extremidad="MI")
+lux_mi<-read.csv("FD:A1:04:E0:B2:92-01-26-2023-13-41-43/illuminance-01-26-2023-13-41-44.csv",header = F)
+lux_mi<-one_var_transform(lux_mi)%>% mutate(extremidad="MI")
+temp_mi<-read.csv("FD:A1:04:E0:B2:92-01-26-2023-13-41-43/temperature[1]-01-26-2023-13-41-44.csv",header = F)
+temp_mi<-one_var_transform(temp_mi)%>% mutate(extremidad="MI")
+```
+
+
+PD
+```{r}
+acel_pd<-read.csv("FF:30:2D:02:C6:4A-01-26-2023-13-43-24/acceleration-01-26-2023-13-43-25.csv",header = F)
+acel_pd<-triaxial_transform(acel_pd) %>% mutate(extremidad="PD")
+lux_pd<-read.csv("FF:30:2D:02:C6:4A-01-26-2023-13-43-24/illuminance-01-26-2023-13-43-25.csv",header = F)
+lux_pd<-one_var_transform(lux_pd)%>% mutate(extremidad="PD")
+temp_pd<-read.csv("FF:30:2D:02:C6:4A-01-26-2023-13-43-24/temperature[1]-01-26-2023-13-43-25.csv",header = F)
+temp_pd<-one_var_transform(temp_pd)%>% mutate(extremidad="PD")
+```
+
+```{r}
+acels <- rbind(acel_md,acel_mi,acel_pd,acel_pi)
+luxes <- rbind(lux_md,lux_mi,lux_pd,lux_pi) %>% mutate(V2= as.numeric(V2))
+temp <- rbind(temp_md,temp_mi,temp_pd,temp_pi)  %>% mutate(V2= as.numeric(V2))
+```
+
+
+```{r}
+labels<-read.csv("etiquetas_2.csv")
+labels %<>% mutate(datetime = paste("2023-01-26 ",datetime),end = paste("2023-01-26",end))
+labels %<>% mutate(start=as.POSIXct(datetime,format="%Y-%m-%d %H:%M:%S"), end=as.POSIXct(end,format="%Y-%m-%d %H:%M:%S") ) %>% mutate(val=1.5) 
+labels %<>% select(start,val,label)
+```
+
+
+Acel X,Y,Z
+```{r}
+p<-acels %>% ggplot(aes(x = time, y = y, shape =extremidad, color = extremidad)) +
+  geom_line(aes(group = 1)) +
+  facet_wrap(~extremidad,ncol = 1,scales="free_x") + 
+  xlab("Hora") + 
+  ylab("g") +
+  theme_prism(border = F,base_size = 10, base_line_size = 0.6,palette = "stained_glass") + 
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, size = 9),
+        axis.text.y = element_text(angle = 0, vjust = 0.5, size = 9),
+        axis.title=element_text(size=14,face="bold"),
+        legend.text=element_text(size=12),
+        legend.position = "bottom")+
+  scale_y_continuous(breaks = seq(min(acels$x), max(acels$x), by = .5))+
+  scale_x_datetime(date_breaks = "5 min", labels = date_format("%H:%M:%S"))+
+  geom_vline(data =labels, aes(xintercept = start),  linetype = 1, colour = "red") 
+
+```
+
+```{r}
+#p + geom_text(data = labels, aes( x=start, y=val, label=label),color="green", size=3)
+#+geom_vline(data =labels, aes(xintercept = start),  linetype = 1, colour = "red")
+```
+
+```{r}
+for(i in 1:length(labels$start)){
+  if((i %% 2) == 0) {
+  labels$val[i]<-max(acels$x)-.2
+  }else{
+    labels$val[i]<-min(acels$x)+.2
+  }
+}
+```
+
+```{r}
+for(i in 1:length(labels$start)){
+p<-p + annotate("text", x = labels$start[i], y = labels$val[i], label =labels$label[i],colour = "white", hjust = 1, vjust = 1)
+}
+
+```
+
+
+```{r}
+p
+```
+
+LUXES
+```{r}
+p<-luxes %>% ggplot(aes(x = time, y = V2, shape =extremidad, color = extremidad)) +
+  geom_line(aes(group = 1)) +
+  facet_wrap(~extremidad,ncol = 1,scales="free_x") + 
+  xlab("Hora") + 
+  ylab("Luxes") +
+  theme_prism(border = F,base_size = 10, base_line_size = 0.6,palette = "stained_glass") + 
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, size = 9),
+        axis.text.y = element_text(angle = 0, vjust = 0.5, size = 9),
+        axis.title=element_text(size=14,face="bold"),
+        legend.text=element_text(size=12),
+        legend.position = "bottom")+
+  scale_y_continuous(breaks = seq(min(luxes$V2), max(luxes$V2), by = 25000))+
+  scale_x_datetime(date_breaks = "5 min", labels = date_format("%H:%M:%S"))+
+  geom_vline(data =labels, aes(xintercept = start),  linetype = 1, colour = "red") 
+
+```
+
+```{r}
+for(i in 1:length(labels$start)){
+  if((i %% 2) == 0) {
+  labels$val[i]<-max(luxes$V2)-1000
+  }else{
+    labels$val[i]<-min(luxes$V2)+1000
+  }
+}
+```
+
+```{r}
+for(i in 1:length(labels$start)){
+p<-p+ annotate("text", x = labels$start[i], y = labels$val[i], label =labels$label[i],colour = "white",size = 2.5, fontface = "bold")
+}
+
+```
+
+
+```{r}
+p
+```
+
+
+
+
+Temp
+```{r}
+p<-temp %>% ggplot(aes(x = time, y = V2, shape =extremidad, color = extremidad)) +
+  geom_line(aes(group = 1)) +
+  facet_wrap(~extremidad,ncol = 1,scales="free_x") + 
+  xlab("Hora") + 
+  ylab("Temperatura (°C)") +
+  theme_prism(border = F,base_size = 10, base_line_size = 0.6,palette = "stained_glass") + 
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, size = 9),
+        axis.text.y = element_text(angle = 0, vjust = 0.5, size = 9),
+        axis.title=element_text(size=14,face="bold"),
+        legend.text=element_text(size=12),
+        legend.position = "bottom")+
+  scale_y_continuous(breaks = seq(min(temp$V2), max(temp$V2), by = 1))+
+  scale_x_datetime(date_breaks = "5 min", labels = date_format("%H:%M:%S"))+
+  geom_vline(data =labels, aes(xintercept = start),  linetype = 1, colour = "red") 
+
+```
+
+
+```{r}
+for(i in 1:length(labels$start)){
+  if((i %% 2) == 0) {
+  labels$val[i]<-max(temp$V2)-2
+  }else{
+    labels$val[i]<-min(temp$V2)+2
+  }
+}
+```
+
+```{r}
+for(i in 1:length(labels$start)){
+p<-p+ annotate("text", x = labels$start[i], y = labels$val[i], label =labels$label[i],colour = "white",size = 2.5, fontface = "bold")
+}
+
+```
+
+
+```{r}
+p
+```
+
+
+```{r}
+HR <-read.csv("heart_rate.csv")
+HR%<>% mutate(start_time = as.POSIXct(start_time))
+```
+
+```{r}
+p<-HR %>% ggplot(aes(x = start_time, y = heart_rate_max)) +
+  geom_line(aes(group = 1),colour="red") +
+  
+  #facet_wrap(~extremidad,ncol = 1,scales="free_x") + 
+  xlab("Hora") + 
+  ylab("Temperatura (°C)") +
+  theme_prism(border = F,base_size = 10, base_line_size = 0.6,palette = "stained_glass") + 
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, size = 9),
+        axis.text.y = element_text(angle = 0, vjust = 0.5, size = 9),
+        axis.title=element_text(size=14,face="bold"),
+        legend.text=element_text(size=12),
+        legend.position = "bottom")+
+  #scale_y_continuous(breaks = seq(min(HR$heart_rate_max), max(HR$heart_rate_max), by = 5))+
+  scale_x_datetime(date_breaks = "5 min", labels = date_format("%H:%M:%S"))+
+  geom_vline(data =labels, aes(xintercept = start),  linetype = 1, colour = "red") 
+```
+
+```{r}
+p
+```
+

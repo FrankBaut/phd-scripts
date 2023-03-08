@@ -1,0 +1,218 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r include=FALSE,echo=FALSE}
+library(tidyverse)
+library(readxl)
+library(lubridate)
+library(ggplot2)
+library(scales)
+library(timetk)
+library(magrittr)
+library(dplyr)
+library(xtable)
+library(rbokeh)
+library(magrittr)
+library(extrafont)
+loadfonts()
+library(ggpointdensity)
+library(ggprism)
+library(lubridate)
+library(timetk)
+```
+
+```{r}
+transform<-function(df,start="2023-01-25 21:13:00",end = "2023-01-26 00:14:00"){
+  df <- df[3:length(df$V1),]
+  df %<>% mutate(time =as.POSIXct(V1))
+  df %<>% mutate(V1 = format(as.POSIXct(V1),"%H:%M:%S"))
+  df <- df[df$time >= as.POSIXct(start) & df$time <= as.POSIXct(end),]
+  df %<>% mutate(V2 = as.numeric(gsub(".*:","",V2)),V3 = as.numeric(gsub(".*:","",V3)), V4 = as.numeric(gsub("}", "",sub("^.*[:]| }", "", V4))))
+  df %<>% rename("x"=V2,"y"=V3,"z"=V4) %>% select(-V1)
+  return(df)
+}
+```
+
+Pie izq
+```{r}
+acel_pi<-read.csv("data/F0:F2:5B:20:91:AD-01-26-2023-00-21-31/acceleration-01-26-2023-00-21-32.csv",header = F)
+acel_pi<-transform(acel_pi) %>% mutate(extremidad="PI")
+vela_pi<-read.csv("data/F0:F2:5B:20:91:AD-01-26-2023-00-21-31/angular-velocity-01-26-2023-00-21-32.csv",header = F)
+vela_pi<-transform(vela_pi)%>% mutate(extremidad="PI")
+mag_pi<-read.csv("data/F0:F2:5B:20:91:AD-01-26-2023-00-21-31/magnetic-field-01-26-2023-00-21-32.csv",header = F)
+mag_pi<-transform(mag_pi)%>% mutate(extremidad="PI")
+```
+
+Muslo izq
+```{r}
+acel_mi<-read.csv("data/FA:30:6C:FE:9A:40-01-26-2023-00-44-27/acceleration-01-26-2023-00-44-28.csv",header = F)
+acel_mi <- transform(acel_mi) %>% mutate(extremidad="MI")
+vela_mi<-read.csv("data/FA:30:6C:FE:9A:40-01-26-2023-00-44-27/angular-velocity-01-26-2023-00-44-28.csv",header = F)
+vela_mi<-transform(vela_mi) %>% mutate(extremidad="MI")
+```
+
+Pie Der
+```{r}
+acel_de<-read.csv("data/FD:A1:04:E0:B2:92-01-26-2023-01-02-01/acceleration-01-26-2023-01-02-02.csv",header = F)
+acel_de<-transform(acel_de) %>% mutate(extremidad="PD")
+vela_de<-read.csv("data/FD:A1:04:E0:B2:92-01-26-2023-01-02-01/angular-velocity-01-26-2023-01-02-02.csv",header = F)
+vela_de<-transform(vela_de) %>% mutate(extremidad="PD")
+mag_de<-read.csv("data/FD:A1:04:E0:B2:92-01-26-2023-01-02-01/magnetic-field-01-26-2023-01-02-02.csv",header = F)
+mag_de<-transform(mag_de) %>% mutate(extremidad="PD")
+```
+
+Muslo Der
+```{r}
+acel_md<-read.csv("data/FF:30:2D:02:C6:4A-01-26-2023-01-26-56/acceleration-01-26-2023-01-26-57.csv",header = F)
+acel_md<-transform(acel_md) %>% mutate(extremidad="MD")
+vela_md<-read.csv("data/FF:30:2D:02:C6:4A-01-26-2023-01-26-56/angular-velocity-01-26-2023-01-26-57.csv",header = F)
+vela_md<-transform(vela_md) %>% mutate(extremidad="MD")
+mag_md<-read.csv("data/FF:30:2D:02:C6:4A-01-26-2023-01-26-56/magnetic-field-01-26-2023-01-26-57.csv",header = F)
+mag_md<-transform(mag_md) %>% mutate(extremidad="MD")
+```
+
+```{r}
+acels <- rbind(acel_de,acel_md,acel_mi,acel_pi)
+gyro <- rbind(vela_de,vela_md,vela_mi,vela_pi)
+mags <- rbind(mag_de,mag_md,mag_pi)
+```
+
+```{r}
+labels<-read.csv("data/etiquetas.csv") 
+labels %<>% mutate(datetime=format(as.POSIXct(date),"%Y-%m-%d %H:%M:%S")) %>% mutate(datetime = as.POSIXct(datetime)) %>% mutate(val=1.5)
+```
+
+
+Acel X,Y,Z
+```{r}
+p<-acels %>% ggplot(aes(x = time, y = y, shape =extremidad, color = extremidad)) +
+  geom_line(aes(group = 1)) +
+  facet_wrap(~extremidad,ncol = 1,scales="free_x") + 
+  xlab("Hora") + 
+  ylab("g") +
+  theme_prism(border = F,base_size = 10, base_line_size = 0.6,palette = "stained_glass") + 
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, size = 9),
+        axis.text.y = element_text(angle = 0, vjust = 0.5, size = 9),
+        axis.title=element_text(size=14,face="bold"),
+        legend.text=element_text(size=12),
+        legend.position = "bottom")+
+  scale_y_continuous(breaks = seq(min(acels$x), max(acels$x), by = .5))+
+  scale_x_datetime(date_breaks = "5 min", labels = date_format("%H:%M:%S"))+
+  geom_vline(data =labels, aes(xintercept = datetime),  linetype = 1, colour = "red") 
+
+```
+
+```{r}
+for(i in 1:length(labels$date)){
+  if((i %% 2) == 0) {
+  labels$val[i]<-1.8
+  }else{
+    labels$val[i]<--1.8
+  }
+}
+```
+
+```{r}
+for(i in 1:length(labels$date)){
+p<-p+ annotate("text", x = labels$datetime[i], y = labels$val[i], label =labels$label[i],colour = "white",size = 2, fontface = "bold")
+}
+
+```
+
+
+```{r}
+p
+ggsave("images/accel_a.pdf",width = 18,height =12 )
+
+```
+
+Velocidad Angular X,Y,Z
+
+
+```{r}
+p<-gyro %>% ggplot(aes(x = time, y = y, shape =extremidad, color = extremidad)) +
+  geom_line(aes(group = 1)) +
+  facet_wrap(~extremidad,ncol = 1,scales="free_x") + 
+  xlab("Hora") + 
+  ylab("deg/s") +
+  theme_prism(border = F,base_size = 10, base_line_size = 0.6,palette = "stained_glass") + 
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, size = 9),
+        axis.text.y = element_text(angle = 0, vjust = 0.5, size = 9),
+        axis.title=element_text(size=14,face="bold"),
+        legend.text=element_text(size=12),
+        legend.position = "bottom")+
+  scale_y_continuous(breaks = seq(min(gyro$x), max(gyro$x), by = 20))+
+  scale_x_datetime(date_breaks = "5 min", labels = date_format("%H:%M:%S"))+
+  geom_vline(data =labels, aes(xintercept = datetime),  linetype = 1, colour = "red") 
+
+```
+
+
+```{r}
+for(i in 1:length(labels$date)){
+  if((i %% 2) == 0) {
+  labels$val[i]<-max(gyro$x)-10
+  }else{
+    labels$val[i]<-min(gyro$x)+10
+  }
+}
+```
+
+```{r}
+for(i in 1:length(labels$date)){
+p<-p+ annotate("text", x = labels$datetime[i], y = labels$val[i], label =labels$label[i],colour = "green",size = 2, fontface = "bold")
+}
+```
+
+```{r }
+p
+```
+Magnetización X,Y,Z
+
+
+```{r}
+p<-mags %>% ggplot(aes(x = time, y = y, shape =extremidad, color = extremidad)) +
+  geom_line(aes(group = 1)) +
+  facet_wrap(~extremidad,ncol = 1,scales="free_x") + 
+  xlab("Hora") + 
+  ylab(expression(~ mu * T)) +
+  theme_prism(border = F,base_size = 10, base_line_size = 0.6,palette = "stained_glass") + 
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, size = 9),
+        axis.text.y = element_text(angle = 0, vjust = 0.5, size = 9),
+        axis.title=element_text(size=14,face="bold"),
+        legend.text=element_text(size=12),
+        legend.position = "bottom")+
+  scale_y_continuous(breaks = seq(min(gyro$x), max(gyro$x), by = 20))+
+  scale_x_datetime(date_breaks = "5 min", labels = date_format("%H:%M:%S"))+
+  geom_vline(data =labels, aes(xintercept = datetime),  linetype = 1, colour = "red") 
+
+```
+
+
+```{r}
+for(i in 1:length(labels$date)){
+  if((i %% 2) == 0) {
+    labels$val[i]<-max(mags$x)-20
+  }else{
+    labels$val[i]<-min(mags$x)+20
+  }
+}
+```
+
+```{r}
+for(i in 1:length(labels$date)){
+p<-p+ annotate("text", x = labels$datetime[i], y = labels$val[i], label =labels$label[i],colour = "white",size = 2, fontface = "bold")
+}
+```
+
+```{r}
+p
+```
