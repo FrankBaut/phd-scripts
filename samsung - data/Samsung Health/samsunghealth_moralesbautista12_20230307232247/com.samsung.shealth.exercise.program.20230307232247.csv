@@ -1,0 +1,5 @@
+com.samsung.shealth.exercise.program,6233003,3
+duration,planned_end_time,start_time,custom,completion_status,update_time,create_time,distance,schedule_count,time_offset,deviceuuid,pkg_name,end_time,datauuid,info_id,is_visible
+,2023-02-24 10:00:00.000,2023-02-22 10:00:00.000,,300,2023-02-22 18:22:12.373,2023-02-22 18:21:55.390,,3,UTC-0600,aZEautf6/t,com.sec.android.app.shealth,2023-02-22 18:22:12.218,96fb6849-9678-442b-88e6-94bac3aa13fa,program.prod34,1,
+,2023-02-26 10:00:00.000,2023-02-22 10:00:00.000,,300,2023-02-22 18:24:12.588,2023-02-22 18:22:47.434,,5,UTC-0600,aZEautf6/t,com.sec.android.app.shealth,2023-02-22 18:24:12.438,840374c1-d48c-49fe-987a-212cac700cc1,program.prod205sm7896529282_0006,1,
+,2023-02-26 10:00:00.000,2023-02-22 10:00:00.000,,300,2023-02-22 18:25:43.744,2023-02-22 18:24:44.891,,5,UTC-0600,aZEautf6/t,com.sec.android.app.shealth,2023-02-22 18:25:43.623,e585a609-5062-4233-be64-bf03d43c6480,program.prod206a5a9b8d3-150e-4515-bafc-bc95c0c8a5f1,1,

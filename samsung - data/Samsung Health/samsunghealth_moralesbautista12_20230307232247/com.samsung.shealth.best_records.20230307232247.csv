@@ -1,0 +1,11 @@
+com.samsung.shealth.best_records,6233003,1
+source_id,device_type,update_time,create_time,source_pkg_name,date,type,value,extra_type,deviceuuid,pkg_name,controller_id,datauuid
+,-1,2023-01-26 17:10:34.963,2023-01-26 17:10:34.963,,1674432000000,6,6.0,-1,aZEautf6/t,com.sec.android.app.shealth,tracker.floor,64a816ed-534f-4701-afb9-8701fbecc29d,
+,-100003,2023-01-26 17:10:35.338,2023-01-26 17:10:35.338,,1674432000000,0,2554.0,-1,aZEautf6/t,com.sec.android.app.shealth,tracker.pedometer,3d8f3e00-4a83-4d0c-a2a4-a6d758ddb2e7,
+,-100003,2023-02-12 13:06:51.980,2023-02-12 13:06:51.980,,1676073600000,0,6110.0,-1,aZEautf6/t,com.sec.android.app.shealth,tracker.pedometer,fc1f6dde-311f-4bdd-a5fd-01d407572008,
+,-1,2023-02-12 17:09:38.316,2023-02-12 17:09:38.316,,1676073600000,6,10.0,-1,aZEautf6/t,com.sec.android.app.shealth,tracker.floor,a58d8974-288a-4763-b610-603a8a4f764c,
+,-100003,2023-01-26 17:10:35.524,2023-01-26 17:10:35.524,,1674345600000,0,1813.0,-1,aZEautf6/t,com.sec.android.app.shealth,tracker.pedometer,bcafe02c-c749-4b27-97f7-f1418d823595,
+,-100003,2023-01-27 08:28:27.443,2023-01-27 08:28:27.443,,1674691200000,0,2792.0,-1,aZEautf6/t,com.sec.android.app.shealth,tracker.pedometer,e3e7edca-c500-4e7a-9af6-0d3e2df48727,
+,-100003,2023-01-29 09:29:24.488,2023-01-29 09:29:24.488,,1674864000000,0,3478.0,-1,aZEautf6/t,com.sec.android.app.shealth,tracker.pedometer,b927e96f-28fe-4721-8f2f-1287cec81046,
+,-1,2023-02-14 10:25:38.718,2023-02-14 10:25:38.718,,1676160000000,6,15.0,-1,aZEautf6/t,com.sec.android.app.shealth,tracker.floor,43691952-8aba-499d-9a8d-be38d3b037c2,
+,-1,2023-02-02 10:33:27.674,2023-02-02 10:33:27.674,,1675209600000,6,7.0,-1,aZEautf6/t,com.sec.android.app.shealth,tracker.floor,bd2b3227-144b-4e82-8d95-b3e83999262a,

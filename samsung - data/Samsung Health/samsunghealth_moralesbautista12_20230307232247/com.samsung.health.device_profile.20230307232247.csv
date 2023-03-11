@@ -1,0 +1,6 @@
+com.samsung.health.device_profile,6233003,6
+manufacturer,providing_step_goal,step_source_group,device_type,backsync_step_goal,capability,device_group,update_time,create_time,name,model,connectivity_type,deviceuuid,pkg_name,fixed_name,datauuid
+Combined,,,,,,0,2023-01-26 17:10:29.813,2023-01-26 17:10:29.813,Combined,Combined,,VfS0qUERdZ,com.sec.android.app.shealth,A52 de Frank,7af9722c-cd99-07b7-853a-43ce58e819c5,
+all_target,,,,,,0,2023-01-26 17:10:30.488,2023-01-26 17:10:30.488,all_target,all_target,,Mk66SbFqK1,com.sec.android.app.shealth,A52 de Frank,471ca32b-a665-1e9e-7c27-7ac69485dc05,
+Samsung,,,,,,360001,2023-01-26 17:10:03.618,2023-01-26 17:10:03.618,My Device,SM-A525M,,aZEautf6/t,com.sec.android.app.shealth,A52 de Frank,6e5815b3-5d02-579d-1cf8-5c7251e0f704,
+Samsung Electronics,1,104,10055,1,f199fc27-f543-4e8d-8b9e-a7be2249f31c.capability.json,360003,2023-03-05 01:13:43.740,2023-01-22 21:28:19.394,Galaxy Watch5,SM-R910,,iRIQdWw88T,com.sec.android.app.shealth,A52 de Frank,f199fc27-f543-4e8d-8b9e-a7be2249f31c,

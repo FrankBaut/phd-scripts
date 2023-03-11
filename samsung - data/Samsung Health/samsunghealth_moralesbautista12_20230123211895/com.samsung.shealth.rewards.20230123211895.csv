@@ -1,0 +1,3 @@
+com.samsung.shealth.rewards,6227003,4
+number_of_streak,start_time,exercise_type,device_type,exercise_session_id,update_time,create_time,source_pkg_name,program_id,title,time_offset,extra_data,deviceuuid,pkg_name,controller_id,end_time,datauuid,is_visible
+,,,,,2023-01-24 03:05:53.520,2023-01-24 03:05:53.520,,,LAST_SLEEP_CHECKING_TIME,,,aZEautf6/t,com.sec.android.app.shealth,Sleep.Goal.Temp,1970-01-01 00:00:00.000,700f21a9-cd80-4c9b-a990-e0f31ff45021,-10000,

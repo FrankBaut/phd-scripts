@@ -1,0 +1,15 @@
+com.samsung.shealth.preferences,6227003,2
+text_value,service_id,float_value,update_time,create_time,long_value,tag,blob_value,int_value,deviceuuid,pkg_name,double_value,datauuid
+,,,2023-01-24 02:16:21.288,2023-01-24 02:15:59.070,,,,0,aZEautf6/t,com.sec.android.app.shealth,,settings.marketing_agreement,
+,,,2023-01-24 03:05:50.053,2023-01-24 02:16:22.829,,,,1,aZEautf6/t,com.sec.android.app.shealth,,together.setting_gc_invitation,
+,,,2023-01-24 03:05:50.063,2023-01-24 02:16:22.834,,,,0,aZEautf6/t,com.sec.android.app.shealth,,together.setting_exposure_level,
+,tracker.heartrate,,2023-01-24 03:02:58.375,2023-01-24 03:02:58.375,,,,1,iRIQdWw88T,com.sec.android.app.shealth,,05-alert.high.enable,
+,tracker.heartrate,,2023-01-24 03:02:59.093,2023-01-24 03:02:59.093,,,,1,iRIQdWw88T,com.sec.android.app.shealth,,05-alert.low.enable,
+,,,2023-01-24 03:05:50.071,2023-01-24 02:16:22.841,,,,0,aZEautf6/t,com.sec.android.app.shealth,,together.setting_ld_auto_addition,
+,tracker.stress,,2023-01-24 03:03:13.005,2023-01-24 03:03:13.005,,,,0,iRIQdWw88T,com.sec.android.app.shealth,,08-measure.period,
+,,,2023-01-22 22:36:46.613,2023-01-22 22:36:44.688,,,stress.breath_settings.blob_value.json,,iRIQdWw88T,com.sec.android.app.shealth,,stress.breath_settings,
+,tracker.spo2,,2023-01-24 03:03:17.141,2023-01-24 03:03:17.141,,,,0,iRIQdWw88T,com.sec.android.app.shealth,,10-measure.period,
+,tracker.exercise,,2023-01-24 02:16:22.293,2023-01-24 02:16:22.293,,,34-workout_list.blob_value.json,,aZEautf6/t,com.sec.android.app.shealth,,34-workout_list,
+,tracker.heartrate,,2023-01-24 03:02:46.002,2023-01-24 03:02:46.002,,,,0,iRIQdWw88T,com.sec.android.app.shealth,,05-measure.period,
+,tracker.exercise,,2023-01-24 02:16:22.286,2023-01-24 02:16:22.286,,,34-favorite_list.blob_value.json,,aZEautf6/t,com.sec.android.app.shealth,,34-favorite_list,
+,,,2023-01-24 03:17:37.366,2023-01-22 23:33:05.664,,,,1,aZEautf6/t,com.sec.android.app.shealth,,step.detectworkout_switch,

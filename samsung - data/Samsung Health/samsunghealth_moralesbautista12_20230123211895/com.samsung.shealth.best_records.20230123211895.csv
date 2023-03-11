@@ -1,0 +1,3 @@
+com.samsung.shealth.best_records,6227003,1
+source_id,device_type,update_time,create_time,source_pkg_name,date,type,value,extra_type,deviceuuid,pkg_name,controller_id,datauuid
+,-1,2023-01-24 03:05:49.018,2023-01-24 03:05:49.018,,1674432000000,6,6.0,-1,aZEautf6/t,com.sec.android.app.shealth,tracker.floor,70a39e6d-62e3-4583-bf46-1dd431d3a846,

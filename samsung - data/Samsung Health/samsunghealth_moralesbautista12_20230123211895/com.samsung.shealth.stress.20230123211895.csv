@@ -1,0 +1,5 @@
+com.samsung.shealth.stress,6227003,7
+start_time,custom,binning_data,tag_id,update_time,create_time,max,min,score,algorithm,time_offset,deviceuuid,comment,pkg_name,end_time,datauuid
+2023-01-22 22:16:02.000,,,10000,2023-01-22 22:16:03.254,2023-01-22 22:16:03.254,,,99.0,,UTC-0600,iRIQdWw88T,,com.sec.android.app.shealth,2023-01-22 22:16:02.000,1b7db6a1-6cdc-4af8-9930-862da8474987,
+2023-01-23 11:52:28.000,,,10000,2023-01-23 11:52:28.254,2023-01-23 11:52:28.254,,,0.0,,UTC-0600,iRIQdWw88T,,com.sec.android.app.shealth,2023-01-23 11:52:28.000,e16cb728-81d8-4234-9e4f-54b792b22044,
+2023-01-24 03:00:00.000,,fbb67ecd-5280-451a-b948-72f03e98e099.binning_data.json,10011,2023-01-24 03:17:33.969,2023-01-24 03:05:19.048,49.0,1.0,26.0,,UTC-0600,iRIQdWw88T,,com.sec.android.app.shealth,2023-01-24 03:17:33.927,fbb67ecd-5280-451a-b948-72f03e98e099,
